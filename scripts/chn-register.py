@@ -43,7 +43,7 @@ def parse_args():
     parser.add_argument('-o',
                         '--state-output',
                         help='State output file',
-                        type=argparse.FileType('w'))
+                        type=argparse.FileType('r+'))
 
     return parser.parse_args()
 
@@ -56,7 +56,8 @@ def main():
         logging.debug("Registration file exists, making sure it's valid")
         overwrite = False
         try:
-            existing_data = json.loads(args.state_output.read())
+            data = args.state_output.read().strip()
+            existing_data = json.loads("%s" % data)
         except Exception as e:
             logging.error(
                 "Could not decode state file in to json, overwriting it")
@@ -71,7 +72,7 @@ def main():
                 overwrite = True
 
     if not overwrite:
-        logging.warn("Registration completed prior to this run")
+        logging.warning("Registration completed prior to this run")
         return 0
 
     resp = requests.post("%s/api/sensor/" % args.url,

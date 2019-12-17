@@ -11,7 +11,7 @@ with open('requirements.txt') as requirements_file:
 
 setup(
     name="chnutils",
-    version="0.0.3",
+    version="0.0.4",
     author="Drew Stinnett",
     author_email="drew.stinnett@duke.edu",
     description=("Helper scripts for CHN"),
