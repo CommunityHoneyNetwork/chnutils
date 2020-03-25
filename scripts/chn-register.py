@@ -26,7 +26,7 @@ def parse_args():
                         default=socket.gethostname())
     try:
         local_ip = socket.gethostbyname(socket.gethostname())
-    except:
+    except Exception as e:
         local_ip = '127.0.0.1'
     parser.add_argument('-i',
                         '--ip-address',
@@ -43,7 +43,7 @@ def parse_args():
     parser.add_argument('-o',
                         '--state-output',
                         help='State output file',
-                        type=argparse.FileType('r+'))
+                        type=str)
 
     return parser.parse_args()
 
@@ -52,12 +52,13 @@ def main():
 
     args = parse_args()
     name = "%s-%s" % (args.hostname, args.honeypot)
-    if os.path.exists(args.state_output.name):
+    overwrite = False
+    if os.path.exists(args.state_output):
         logging.debug("Registration file exists, making sure it's valid")
-        overwrite = False
         try:
-            data = args.state_output.read().strip()
-            existing_data = json.loads("%s" % data)
+            with open(args.state_output, 'r') as state:
+                data = state.read().strip()
+                existing_data = json.loads("%s" % data)
         except Exception as e:
             logging.error(
                 "Could not decode state file in to json, overwriting it")
@@ -70,6 +71,8 @@ def main():
                 logging.error(
                     "State file does not include honeypot, overwriting")
                 overwrite = True
+    else:
+        overwrite = True
 
     if not overwrite:
         logging.warning("Registration completed prior to this run")
@@ -92,7 +95,8 @@ def main():
         logging.error("%s" % e)
         return 5
 
-    args.state_output.write(json.dumps(resp.json()))
+    with open(args.state_output, 'w') as state:
+        state.write(json.dumps(resp.json()))
     return 0
 
 
