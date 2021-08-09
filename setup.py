@@ -18,7 +18,8 @@ setup(
     install_requires=install_requirements,
     license="LGPL 2.1",
     keywords="chn",
-    scripts=['scripts/chn-register.py'],
+    scripts=['scripts/chn-register.py',
+             'scripts/add-user.py'],
     long_description_content_type="text/markdown",
     long_description=read('README.md'),
 )
