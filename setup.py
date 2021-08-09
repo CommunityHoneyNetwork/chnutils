@@ -18,6 +18,7 @@ setup(
     install_requires=install_requirements,
     license="LGPL 2.1",
     keywords="chn",
+    packages=["chnutils"],
     scripts=['scripts/chn-register.py',
              'scripts/add-user.py'],
     long_description_content_type="text/markdown",
