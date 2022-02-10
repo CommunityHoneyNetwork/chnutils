@@ -1,6 +1,6 @@
 import argparse
 import uuid
-from chnutils import hpfeeds_user
+from chn_utils.hpfeeds_user import create_user
 
 
 def main():
